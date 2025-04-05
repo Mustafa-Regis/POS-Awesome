@@ -147,7 +147,9 @@ export default {
       drawer: false,
       mini: true,
       item: 0,
-      items: [{ text: 'POS', icon: 'mdi-network-pos' }],
+      items: [{ text: 'POS', icon: 'mdi-network-pos' },
+              { text: 'ShiftExpense', icon: 'mdi-cash-minus'}
+      ],
       page: '',
       fav: true,
       menu: false,
