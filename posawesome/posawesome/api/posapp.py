@@ -1121,6 +1121,26 @@ def add_customer_rating(customer, status, created_by, note=None):
 
 
 @frappe.whitelist()
+def get_customer_rating_history(customer):
+    doc = frappe.get_doc("Customer", customer)
+    history = []
+    for row in reversed(doc.rating_history):
+        full_name = frappe.db.get_value("User", row.created_by, "full_name") or row.created_by
+        history.append({
+            "status": row.status,
+            "note": row.note,
+            "created_by": full_name,
+            "posting_date": str(row.posting_date) if row.posting_date else "",
+        })
+    return {
+        "good_count": doc.good_count or 0,
+        "risky_count": doc.risky_count or 0,
+        "blacklist_count": doc.blacklist_count or 0,
+        "history": history,
+    }
+
+
+@frappe.whitelist()
 def get_items_from_barcode(selling_price_list, currency, barcode):
     search_item = frappe.get_all(
         "Item Barcode",
