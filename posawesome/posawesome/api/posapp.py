@@ -1103,6 +1103,24 @@ def create_customer(
 
 
 @frappe.whitelist()
+def add_customer_rating(customer, status, created_by, note=None):
+    customer_doc = frappe.get_doc("Customer", customer)
+    customer_doc.append("rating_history", {
+        "status": status,
+        "note": note or "",
+        "created_by": created_by,
+        "posting_date": frappe.utils.now_datetime()
+    })
+    customer_doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return {
+        "good_count": customer_doc.good_count,
+        "risky_count": customer_doc.risky_count,
+        "blacklist_count": customer_doc.blacklist_count,
+    }
+
+
+@frappe.whitelist()
 def get_items_from_barcode(selling_price_list, currency, barcode):
     search_item = frappe.get_all(
         "Item Barcode",

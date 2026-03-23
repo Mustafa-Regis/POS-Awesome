@@ -52,8 +52,15 @@
         </template>
       </template>
     </v-autocomplete>
+    <div class="d-flex justify-end mb-1" v-if="customer">
+      <v-btn x-small text color="warning" @click="rate_customer">
+        <v-icon x-small left>mdi-star</v-icon>
+        {{ __('Rate Customer') }}
+      </v-btn>
+    </div>
     <div class="mb-8">
       <UpdateCustomer></UpdateCustomer>
+      <RatingCustomer></RatingCustomer>
     </div>
   </div>
 </template>
@@ -61,6 +68,7 @@
 <script>
 import { evntBus } from '../../bus';
 import UpdateCustomer from './UpdateCustomer.vue';
+import RatingCustomer from './RatingCustomer.vue';
 export default {
   data: () => ({
     pos_profile: '',
@@ -72,6 +80,7 @@ export default {
 
   components: {
     UpdateCustomer,
+    RatingCustomer,
   },
 
   methods: {
@@ -108,6 +117,11 @@ export default {
     },
     edit_customer() {
       evntBus.$emit('open_update_customer', this.customer_info);
+    },
+    rate_customer() {
+      if (this.customer_info && this.customer_info.name) {
+        evntBus.$emit('open_customer_rating', this.customer_info);
+      }
     },
     customFilter(item, queryText, itemText) {
       const textOne = item.customer_name
@@ -167,6 +181,15 @@ export default {
       });
       evntBus.$on('fetch_customer_details', () => {
         this.get_customer_names();
+      });
+      evntBus.$on('update_customer_rating_counts', ({ customer, counts }) => {
+        const idx = this.customers.findIndex((c) => c.name === customer);
+        if (idx !== -1) {
+          this.customers[idx].good_count = counts.good_count;
+          this.customers[idx].risky_count = counts.risky_count;
+          this.customers[idx].blacklist_count = counts.blacklist_count;
+          this.customers = [...this.customers]; // trigger reactivity
+        }
       });
     });
   },
