@@ -11,7 +11,7 @@
       :items="customers"
       item-text="customer_name"
       item-value="name"
-      background-color="white"
+      :background-color="customer_color"
       :no-data-text="__('Customer not found')"
       hide-details
       :filter="customFilter"
@@ -129,7 +129,19 @@ export default {
     },
   },
 
-  computed: {},
+  computed: {
+    customer_color() {
+      const vm = this;
+      if (!vm.customer) return 'white';
+      const customer_obj = vm.customers.find((c) => c.name === vm.customer);
+      if (!customer_obj) return 'white';
+
+      if (customer_obj.blacklist_count > 0) return '#ff5252'; // Red
+      if (customer_obj.risky_count > 0) return '#ffeb3b'; // Yellow
+      if (customer_obj.good_count > 0) return '#4caf50'; // Green
+      return 'white';
+    },
+  },
 
   created: function () {
     this.$nextTick(function () {
