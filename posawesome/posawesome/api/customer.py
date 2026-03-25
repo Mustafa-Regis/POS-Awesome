@@ -16,6 +16,25 @@ def after_insert(doc, method):
 
 def validate(doc, method):
     validate_referral_code(doc)
+    recalculate_ratings(doc)
+
+def recalculate_ratings(doc):
+    good_count = 0
+    risky_count = 0
+    blacklist_count = 0
+
+    if doc.get("rating_history"):
+        for row in doc.rating_history:
+            if row.status == "Good":
+                good_count += 1
+            elif row.status == "Risky":
+                risky_count += 1
+            elif row.status == "Blacklisted":
+                blacklist_count += 1
+
+    doc.good_count = good_count
+    doc.risky_count = risky_count
+    doc.blacklist_count = blacklist_count
 
 
 def create_customer_referral_code(doc):

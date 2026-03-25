@@ -1,0 +1,59 @@
+{
+  "custom_fields": [
+    {
+      "dt": "Customer",
+      "fieldname": "customer_rating_section",
+      "fieldtype": "Section Break",
+      "label": "Customer Rating Section",
+      "insert_after": "customer_details"
+    },
+    {
+      "dt": "Customer",
+      "fieldname": "good_count",
+      "fieldtype": "Int",
+      "label": "Good Count",
+      "insert_after": "customer_rating_section",
+      "read_only": 1,
+      "default": 0
+    },
+    {
+      "dt": "Customer",
+      "fieldname": "risky_count",
+      "fieldtype": "Int",
+      "label": "Risky Count",
+      "insert_after": "good_count",
+      "read_only": 1,
+      "default": 0
+    },
+    {
+      "dt": "Customer",
+      "fieldname": "blacklist_count",
+      "fieldtype": "Int",
+      "label": "Blacklist Count",
+      "insert_after": "risky_count",
+      "read_only": 1,
+      "default": 0
+    },
+    {
+      "dt": "Customer",
+      "fieldname": "rating_history_section",
+      "fieldtype": "Section Break",
+      "label": "Rating History",
+      "collapsible": 1,
+      "insert_after": "blacklist_count"
+    },
+    {
+      "dt": "Customer",
+      "fieldname": "rating_history",
+      "fieldtype": "Table",
+      "label": "Rating History Details",
+      "options": "Customer Rating History",
+      "insert_after": "rating_history_section"
+    }
+  ],
+  "custom_perms": [],
+  "doctype": "Customer",
+  "links": [],
+  "property_setters": [],
+  "sync_on_migrate": 1
+}
